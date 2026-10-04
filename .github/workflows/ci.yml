@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.14"] # 3.14 is what production runs
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - run: pytest -q

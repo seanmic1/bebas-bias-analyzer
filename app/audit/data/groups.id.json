@@ -1,0 +1,133 @@
+{
+  "version": "2026-08-30",
+  "_comment": [
+    "Indonesian demographic gazetteer for the counterfactual audit. Taxonomy",
+    "follows IndoBias (arXiv:2606.01260) categories. Editorial-owned: extend",
+    "`members` and `contrasts` here rather than in Python.",
+    "",
+    "`require_prefix` guards against the ethnonym/toponym collision that makes",
+    "naive substitution unsafe in Indonesian: 'Jawa' is both an ethnicity and",
+    "part of 'Jawa Barat'. Requiring an explicit ethnonym marker ('orang Jawa',",
+    "'suku Jawa') means province names are never rewritten.",
+    "",
+    "`case_sensitive` protects short acronyms (UI) from matching stray text.",
+    "`not_followed_by` is a secondary guard for names that head compound",
+    "toponyms even after the prefix rule; `not_preceded_by` blocks fixed office",
+    "titles, where a swap would invent a post that does not exist.",
+    "",
+    "`substitutable: false` marks a category whose members are not",
+    "interchangeable in context. Those contrasts are skipped unless explicitly",
+    "opted into, because swapping them measures incoherence, not bias."
+  ],
+
+  "categories": {
+    "ethnicity": {
+      "require_prefix": ["orang", "suku", "etnis", "warga", "masyarakat", "komunitas"],
+      "members": {
+        "Jawa": {"not_followed_by": ["Barat", "Timur", "Tengah"]},
+        "Sunda": {"not_followed_by": ["Kelapa", "Empire"]},
+        "Batak": {},
+        "Minang": {},
+        "Bugis": {},
+        "Madura": {},
+        "Papua": {"not_followed_by": ["Barat", "Tengah", "Selatan", "Pegunungan"]},
+        "Dayak": {},
+        "Ambon": {},
+        "Tionghoa": {},
+        "Betawi": {}
+      },
+      "contrasts": [
+        ["Jawa", "Papua"],
+        ["Jawa", "Tionghoa"],
+        ["Sunda", "Madura"],
+        ["Batak", "Dayak"]
+      ]
+    },
+
+    "religion": {
+      "members": {
+        "Islam": {},
+        "Kristen": {},
+        "Katolik": {},
+        "Hindu": {},
+        "Buddha": {},
+        "Konghucu": {},
+        "Ahmadiyah": {},
+        "Syiah": {}
+      },
+      "contrasts": [
+        ["Islam", "Kristen"],
+        ["Islam", "Ahmadiyah"],
+        ["Islam", "Syiah"],
+        ["Kristen", "Hindu"]
+      ]
+    },
+
+    "political_party": {
+      "members": {
+        "PDIP": {"case_sensitive": true},
+        "Golkar": {},
+        "Gerindra": {},
+        "PKB": {"case_sensitive": true},
+        "PKS": {"case_sensitive": true},
+        "NasDem": {},
+        "Demokrat": {},
+        "PAN": {"case_sensitive": true},
+        "PPP": {"case_sensitive": true},
+        "PSI": {"case_sensitive": true}
+      },
+      "contrasts": [
+        ["PDIP", "PKS"],
+        ["Gerindra", "PDIP"],
+        ["Golkar", "PSI"]
+      ]
+    },
+
+    "government_institution": {
+      "substitutable": false,
+      "_substitutable_note": [
+        "Excluded by default (pass --include-fragile to opt in). Institution",
+        "names are not interchangeable in context: they sit inside fixed office",
+        "titles ('Panglima TNI', 'Mabes Polri', 'Ketua KPK') and denote bodies",
+        "with non-overlapping roles, so a swap yields text naming a post that",
+        "does not exist. The resulting score delta measures incoherence, not",
+        "bias. Kept here because Polri-vs-Komnas HAM sourcing is a genuine",
+        "state_vs_civil signal worth auditing once the guards are proven."
+      ],
+      "members": {
+        "Polri": {"not_preceded_by": ["Mabes", "Kapolri", "Divisi"]},
+        "TNI": {
+          "case_sensitive": true,
+          "not_preceded_by": ["Panglima", "Mabes", "Markas", "Danrem", "Kodam"]
+        },
+        "KPK": {"case_sensitive": true, "not_preceded_by": ["Ketua", "Pimpinan", "Gedung"]},
+        "Komnas HAM": {"not_preceded_by": ["Ketua", "Komisioner"]},
+        "Kejaksaan Agung": {},
+        "BIN": {"case_sensitive": true, "not_preceded_by": ["Kepala"]}
+      },
+      "contrasts": [
+        ["Polri", "KPK"],
+        ["Polri", "Komnas HAM"]
+      ]
+    },
+
+    "university": {
+      "members": {
+        "UI": {
+          "case_sensitive": true,
+          "not_preceded_by": ["One", "user", "antarmuka", "desain", "design"],
+          "not_followed_by": ["9", "8", "7", "6"]
+        },
+        "UGM": {"case_sensitive": true},
+        "ITB": {"case_sensitive": true},
+        "Universitas Cenderawasih": {},
+        "Universitas Hasanuddin": {},
+        "Universitas Airlangga": {}
+      },
+      "contrasts": [
+        ["UI", "Universitas Cenderawasih"],
+        ["UGM", "Universitas Hasanuddin"]
+      ]
+    }
+  }
+}

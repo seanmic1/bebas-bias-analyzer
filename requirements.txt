@@ -1,0 +1,11 @@
+# The engine's runtime dependencies, minus the backend's web server. Same lower
+# bounds as the backend's bb-think/requirements.txt.
+pydantic>=2.7
+openai>=1.40
+nltk>=3.9
+asyncpg>=0.29
+httpx>=0.27
+python-dotenv>=1.0
+
+# Tests only.
+pytest>=8.0
